@@ -51,6 +51,7 @@ public class ProductoDAO {
         prod.setPrecio(p.getPrecio());
         prod.setProveedor(p.getProveedor());
         prod.setStockMinimo(p.getStockMinimo());
+        prod.setEstado(p.isEstado());
             
         Transaction tx = session.beginTransaction();
         try
@@ -68,7 +69,7 @@ public class ProductoDAO {
             session.close();
     }
     
-    public void baja(int id)
+   /* public void baja(int id)
     {
         Producto prod = null;
         
@@ -93,7 +94,7 @@ public class ProductoDAO {
         }
             session.close();
     }
-    
+    */
     
     public Producto buscarPorId(int id)
     {
@@ -143,8 +144,8 @@ public class ProductoDAO {
             SessionFactory sesion = NewHibernateUtil.getSessionFactory();
             Session session = sesion.openSession();
             Transaction tx = session.beginTransaction();
-            Query query = session.createQuery("FROM Producto p WHERE p.codigo = :codigo");
-            query.setParameter("codigo", codigo);
+            Query query = session.createQuery("FROM Producto p WHERE p.codigo LIKE :codigo");
+            query.setParameter("codigo", "%"+codigo+"%");
             lista = query.list();
             tx.commit();
         }
@@ -164,8 +165,8 @@ public class ProductoDAO {
             SessionFactory sesion = NewHibernateUtil.getSessionFactory();
             Session session = sesion.openSession();
             Transaction tx = session.beginTransaction();
-            Query query = session.createQuery("FROM Producto p WHERE p.codigo = :cadena OR p.descripcion = :cadena");
-            query.setParameter("cadena", cadena);
+            Query query = session.createQuery("FROM Producto p WHERE p.codigo LIKE :cadena OR p.descripcion LIKE :cadena");
+            query.setParameter("cadena", "%"+cadena+"%");
             lista = query.list();
             tx.commit();
         }
