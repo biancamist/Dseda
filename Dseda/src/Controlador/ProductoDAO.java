@@ -133,7 +133,7 @@ public class ProductoDAO {
         }
         catch(Exception e)
         {
-            JOptionPane.showMessageDialog(null, "Error");
+            JOptionPane.showMessageDialog(null, "Error. Listar productos");
         }
         return lista;
     }
@@ -147,18 +147,37 @@ public class ProductoDAO {
             Session session = sesion.openSession();
             Transaction tx = session.beginTransaction();
             Query query = session.createQuery("FROM Producto p WHERE p.codigo LIKE :codigo");
-            query.setParameter("codigo", "%"+codigo+"%");
+            query.setParameter("codigo", codigo+"%");
             lista = query.list();
             tx.commit();
         }
         catch(Exception e)
         {
-            JOptionPane.showMessageDialog(null, "Error");
+            JOptionPane.showMessageDialog(null, "Error. Producto por codigo");
         }
         return lista;
     }
     
-   /*
+    public List<Producto> alarma()
+    {
+        List<Producto> lista = null;
+        try
+        {
+            SessionFactory sesion = NewHibernateUtil.getSessionFactory();
+            Session session = sesion.openSession();
+            Transaction tx = session.beginTransaction();
+            Query query = session.createQuery("FROM Producto p WHERE p.stock <= p.stockMinimo");
+            lista = query.list();
+            tx.commit();
+        }
+        catch(Exception e)
+        {
+            JOptionPane.showMessageDialog(null, "Error. Lista stock minimo");
+        }
+        return lista;
+    }
+    
+   
     public List<Producto> buscarPorCodigoNombre(String cadena)
     {
         List<Producto> lista = null;
@@ -174,9 +193,9 @@ public class ProductoDAO {
         }
         catch(Exception e)
         {
-            JOptionPane.showMessageDialog(null, "Error");
+            JOptionPane.showMessageDialog(null, "Error. Producto por codigo o descripcion");
         }
         return lista;
     }
-    */
+    
 }
