@@ -5,13 +5,21 @@
  */
 package Vista;
 
+import Controlador.ProductoDAO;
+import Modelo.Producto;
 import java.awt.Image;
 import java.io.File;
+import java.math.BigDecimal;
+import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 public class ventanaNuevoProd extends javax.swing.JFrame 
 {    
+    
+    final ProductoDAO pDAO = new ProductoDAO();
+    
     public ventanaNuevoProd()
     {
         initComponents();
@@ -64,6 +72,11 @@ public class ventanaNuevoProd extends javax.swing.JFrame
         btnCancelarNP.setText("Cancelar");
 
         btnConfirmarNP.setText("Confirmar");
+        btnConfirmarNP.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConfirmarNPActionPerformed(evt);
+            }
+        });
 
         jLabel8.setText("Estado:");
 
@@ -188,6 +201,35 @@ public class ventanaNuevoProd extends javax.swing.JFrame
             jLabImagenNP.setIcon(new ImageIcon(img));
         }
     }//GEN-LAST:event_btnCargarImagenNPActionPerformed
+
+    private void btnConfirmarNPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarNPActionPerformed
+        
+        String codigo = txfdCodigoNP.getText();
+        String descripcion = txfdDescripNP.getText();
+        int stockMin = Integer.parseInt(txfdStockMinNP.getText());
+        double precio = Double.parseDouble(txfdPrecioNP.getText());
+        //Proveedor proveedor
+        boolean estado;
+        if(cbEstadoNP.getSelectedItem().toString() == "Habilitado")
+        {
+            estado = true;
+        }
+        else
+        {
+            estado = false;
+        }
+        //byte[] imagen
+        
+        Producto p = new Producto();
+        p.setCodigo(codigo);
+        p.setDescripcion(descripcion);
+        p.setStockMinimo(stockMin);
+        p.setPrecio(BigDecimal.valueOf(precio));
+        p.setEstado(estado);
+        
+        pDAO.alta(p);
+        
+    }//GEN-LAST:event_btnConfirmarNPActionPerformed
 
     /**
      * @param args the command line arguments

@@ -8,6 +8,8 @@ public class ventanaProducto extends javax.swing.JFrame
         
         this.setLocationRelativeTo(ventanaProducto.this);
         this.setResizable(false);
+        
+        
     }
     
     @SuppressWarnings("unchecked")

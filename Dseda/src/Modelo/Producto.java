@@ -30,23 +30,23 @@ public class Producto  implements java.io.Serializable {
     }
 
 	
-    public Producto(int id/*, Proveedor proveedor*/, String codigo, String descripcion, BigDecimal precio, int stock, int stockMinimo, boolean estado) {
+    public Producto(int id/*, Proveedor proveedor*/, String codigo, String descripcion, BigDecimal precio, int stockMinimo, boolean estado) {
         this.id = id;
        // this.proveedor = proveedor;
         this.codigo = codigo;
         this.descripcion = descripcion;
         this.precio = precio;
-        this.stock = stock;
+        this.stock = 0;
         this.stockMinimo = stockMinimo;
         this.estado = estado;
     }
-    public Producto(int id, Set proveedor, String codigo, String descripcion, BigDecimal precio, int stock, int stockMinimo, byte[] imagen, boolean estado/*, Set entradas, Set salidas*/) {
+    public Producto(int id, Set proveedor, String codigo, String descripcion, BigDecimal precio, int stockMinimo, byte[] imagen, boolean estado/*, Set entradas, Set salidas*/) {
        this.id = id;
        this.proveedor = proveedor;
        this.codigo = codigo;
        this.descripcion = descripcion;
        this.precio = precio;
-       this.stock = stock;
+       this.stock = 0;
        this.stockMinimo = stockMinimo;
        this.imagen = imagen;
        this.estado = estado;
