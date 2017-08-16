@@ -1,5 +1,8 @@
 package Vista;
 
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+
 public class ventanaProducto extends javax.swing.JFrame 
 {
     public ventanaProducto() 
@@ -9,7 +12,28 @@ public class ventanaProducto extends javax.swing.JFrame
         this.setLocationRelativeTo(ventanaProducto.this);
         this.setResizable(false);
         
+        DefaultTableModel modelo = new DefaultTableModel();
+        modelo.addColumn("Codigo");
+        modelo.addColumn("Descripción");
+        modelo.addColumn("Precio");
+        modelo.addColumn("Stock");
+        modelo.addColumn("Estado");
+        modelo.addColumn("Proveedor");
         
+        
+        String sql = "SELECT codigo, descripcion, precio, stock, estado, proveedor_id FROM Producto";
+        String []datos = new String[6];
+        try 
+        {
+            //Statement st = con.createStatement();
+            
+        }
+        catch (Exception e)
+        {
+                    
+        }
+        
+        tablaProductos.setModel(modelo);
     }
     
     @SuppressWarnings("unchecked")
