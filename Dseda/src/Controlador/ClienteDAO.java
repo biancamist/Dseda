@@ -5,8 +5,7 @@
  */
 package Controlador;
 
-
-import Modelo.Proveedor;
+import Modelo.Cliente;
 import java.util.List;
 import javax.swing.JOptionPane;
 import org.hibernate.HibernateException;
@@ -19,15 +18,15 @@ import org.hibernate.Transaction;
  *
  * @author Bian
  */
-public class ProveedorDAO {
+public class ClienteDAO {
     
-    public void alta(Proveedor p)
+    public void alta(Cliente c)
     {
         SessionFactory sesion = NewHibernateUtil.getSessionFactory();
         Session session = sesion.openSession();
         Transaction tx = session.beginTransaction();
         try{
-            session.save(p);
+            session.save(c);
             tx.commit();
         }
         catch(Exception e)
@@ -38,27 +37,27 @@ public class ProveedorDAO {
 		throw e;
         }
         session.close();
-        JOptionPane.showMessageDialog(null, "Proveedor agregado");
+        JOptionPane.showMessageDialog(null, "Cliente agregado");
     }
     
-    public void modificar(Proveedor p, int id)
+    public void modificar(Cliente c, int id)
     {
-        Proveedor prov = null;
+        Cliente cliente = null;
         
         SessionFactory sesion = NewHibernateUtil.getSessionFactory();
         Session session = sesion.openSession();
             
-        prov = (Proveedor)session.get(Proveedor.class, id);
-        prov.setNombreCompleto(p.getNombreCompleto());
-        prov.setCuit(p.getCuit());
-        prov.setDireccion(p.getDireccion());
-        prov.setEstado(p.isEstado());
-        prov.setTelefono(p.getTelefono());
+        cliente = (Cliente)session.get(Cliente.class, id);
+        cliente.setNombreCompleto(c.getNombreCompleto());
+        cliente.setCuit(c.getCuit());
+        cliente.setDireccion(c.getDireccion());
+        cliente.setEstado(c.isEstado());
+        cliente.setTelefono(c.getTelefono());
             
         Transaction tx = session.beginTransaction();
         try
         {
-          session.merge(prov);
+          session.merge(cliente);
           tx.commit();
         }
         catch(Exception e)
@@ -69,23 +68,23 @@ public class ProveedorDAO {
 		throw e;
         }
             session.close();
-            JOptionPane.showMessageDialog(null, "Proveedor modificado");
+            JOptionPane.showMessageDialog(null, "Cliente modificado");
     }
     
    /* public void baja(int id)
     {
-        Proveedor prov = null;
+        Cliente cliente = null;
         
         SessionFactory sesion = NewHibernateUtil.getSessionFactory();
         Session session = sesion.openSession();
             
-        prov = (Proveedor)session.get(Proveedor.class, id);
-        prov.setEstado(false);
+        cliente = (Cliente)session.get(Cliente.class, id);
+        cliente.setEstado(false);
             
         Transaction tx = session.beginTransaction();
         try
         {
-          session.update(prov);
+          session.update(cliente);
           tx.commit();
         }
         catch(Exception e)
@@ -96,41 +95,41 @@ public class ProveedorDAO {
 		throw e;
         }
             session.close();
-            JOptionPane.showMessageDialog(null, "Proveedor dado de baja");
+            JOptionPane.showMessageDialog(null, "Cliente eliminado");
     }
     */
     
-    public Proveedor buscarPorId(int id)
+    public Cliente buscarPorId(int id)
     {
-        Proveedor p = null;
+        Cliente c = null;
         try{           
             SessionFactory sesion = NewHibernateUtil.getSessionFactory();
             Session session = sesion.openSession();
             Transaction tx = session.beginTransaction();
-            p = (Proveedor)session.get(Proveedor.class,id);
+            c = (Cliente)session.get(Cliente.class,id);
             /*if(p != null)
             {
-                JOptionPane.showMessageDialog(null, "Proveedor encontrado");
+                JOptionPane.showMessageDialog(null, "CLiente encontrado");
             }*/
             tx.commit();
             session.close();
         } catch(HibernateException e)
         {
-            JOptionPane.showMessageDialog(null, "Proveedor no encontrado");
+            JOptionPane.showMessageDialog(null, "Cliente no encontrado");
         }
         
-        return p;
+        return c;
     }
     
-    public List<Proveedor> listar()
+    public List<Cliente> listar()
     {
-        List<Proveedor> lista = null;
+        List<Cliente> lista = null;
         try
         {
             SessionFactory sesion = NewHibernateUtil.getSessionFactory();
             Session session = sesion.openSession();
             Transaction tx = session.beginTransaction();
-            lista = session.createQuery("FROM Proveedor").list();
+            lista = session.createQuery("FROM Cliente").list();
             tx.commit();
         }
         catch(Exception e)
@@ -140,15 +139,15 @@ public class ProveedorDAO {
         return lista;
     }
     
-    public List<Proveedor> buscarPorCuit(String cuit)
+    public List<Cliente> buscarPorCuit(String cuit)
     {
-        List<Proveedor> lista = null;
+        List<Cliente> lista = null;
         try
         {
             SessionFactory sesion = NewHibernateUtil.getSessionFactory();
             Session session = sesion.openSession();
             Transaction tx = session.beginTransaction();
-            Query query = session.createQuery("FROM Proveedor p WHERE p.cuit LIKE :cuit");
+            Query query = session.createQuery("FROM Cliente c WHERE c.cuit LIKE :cuit");
             query.setParameter("cuit", "%"+cuit+"%");
             lista = query.list();
             tx.commit();
@@ -161,15 +160,15 @@ public class ProveedorDAO {
     }
     
    /*
-    public List<Proveedor> buscarPorCuitNombre(String cadena)
+    public List<Cliente> buscarPorCuitNombre(String cadena)
     {
-        List<Proveedor> lista = null;
+        List<Cliente> lista = null;
         try
         {
             SessionFactory sesion = NewHibernateUtil.getSessionFactory();
             Session session = sesion.openSession();
             Transaction tx = session.beginTransaction();
-            Query query = session.createQuery("FROM Proveedor p WHERE p.cuit LIKE :cadena OR p.nombre_completo LIKE :cadena");
+            Query query = session.createQuery("FROM Cliente c WHERE c.cuit LIKE :cadena OR c.nombre_completo LIKE :cadena");
             query.setParameter("cadena", "%"+cadena+"%");
             lista = query.list();
             tx.commit();

@@ -94,7 +94,7 @@ public class ProductoDAO {
 		throw e;
         }
             session.close();
-            JOptionPane.showMessageDialog(null, "Producto eliminado");
+            JOptionPane.showMessageDialog(null, "Producto dado de baja");
     }
     */
     

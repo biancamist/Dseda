@@ -5,8 +5,8 @@
  */
 package Controlador;
 
-
-import Modelo.Proveedor;
+import Modelo.Salida;
+import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
 import org.hibernate.HibernateException;
@@ -19,15 +19,15 @@ import org.hibernate.Transaction;
  *
  * @author Bian
  */
-public class ProveedorDAO {
+public class SalidaDAO {
     
-    public void alta(Proveedor p)
+    public void alta(Salida sa)
     {
         SessionFactory sesion = NewHibernateUtil.getSessionFactory();
         Session session = sesion.openSession();
         Transaction tx = session.beginTransaction();
         try{
-            session.save(p);
+            session.save(sa);
             tx.commit();
         }
         catch(Exception e)
@@ -38,27 +38,27 @@ public class ProveedorDAO {
 		throw e;
         }
         session.close();
-        JOptionPane.showMessageDialog(null, "Proveedor agregado");
+        JOptionPane.showMessageDialog(null, "Salida agregada");
     }
     
-    public void modificar(Proveedor p, int id)
+    public void modificar(Salida sa, int id)
     {
-        Proveedor prov = null;
+        Salida salida = null;
         
         SessionFactory sesion = NewHibernateUtil.getSessionFactory();
         Session session = sesion.openSession();
             
-        prov = (Proveedor)session.get(Proveedor.class, id);
-        prov.setNombreCompleto(p.getNombreCompleto());
-        prov.setCuit(p.getCuit());
-        prov.setDireccion(p.getDireccion());
-        prov.setEstado(p.isEstado());
-        prov.setTelefono(p.getTelefono());
+        salida = (Salida)session.get(Salida.class, id);
+        salida.setCantidad(sa.getCantidad());
+        salida.setFecha(sa.getFecha());
+        salida.setProducto(sa.getProducto());
+        salida.setCliente(sa.getCliente());
+        salida.setEstado(sa.isEstado());
             
         Transaction tx = session.beginTransaction();
         try
         {
-          session.merge(prov);
+          session.merge(salida);
           tx.commit();
         }
         catch(Exception e)
@@ -69,23 +69,23 @@ public class ProveedorDAO {
 		throw e;
         }
             session.close();
-            JOptionPane.showMessageDialog(null, "Proveedor modificado");
+            JOptionPane.showMessageDialog(null, "Salida modificada");
     }
     
    /* public void baja(int id)
     {
-        Proveedor prov = null;
+        Salida sa = null;
         
         SessionFactory sesion = NewHibernateUtil.getSessionFactory();
         Session session = sesion.openSession();
             
-        prov = (Proveedor)session.get(Proveedor.class, id);
-        prov.setEstado(false);
+        sa = (Salida)session.get(Salida.class, id);
+        sa.setEstado(false);
             
         Transaction tx = session.beginTransaction();
         try
         {
-          session.update(prov);
+          session.update(sa);
           tx.commit();
         }
         catch(Exception e)
@@ -96,41 +96,41 @@ public class ProveedorDAO {
 		throw e;
         }
             session.close();
-            JOptionPane.showMessageDialog(null, "Proveedor dado de baja");
+            JOptionPane.showMessageDialog(null, "Salida dada de baja");
     }
     */
     
-    public Proveedor buscarPorId(int id)
+    public Salida buscarPorId(int id)
     {
-        Proveedor p = null;
+        Salida sa = null;
         try{           
             SessionFactory sesion = NewHibernateUtil.getSessionFactory();
             Session session = sesion.openSession();
             Transaction tx = session.beginTransaction();
-            p = (Proveedor)session.get(Proveedor.class,id);
+            sa = (Salida)session.get(Salida.class,id);
             /*if(p != null)
             {
-                JOptionPane.showMessageDialog(null, "Proveedor encontrado");
+                JOptionPane.showMessageDialog(null, "Salida encontrada");
             }*/
             tx.commit();
             session.close();
         } catch(HibernateException e)
         {
-            JOptionPane.showMessageDialog(null, "Proveedor no encontrado");
+            JOptionPane.showMessageDialog(null, "Salida no encontrado");
         }
         
-        return p;
+        return sa;
     }
     
-    public List<Proveedor> listar()
+    public List<Salida> listar()
     {
-        List<Proveedor> lista = null;
+        List<Salida> lista = null;
         try
         {
             SessionFactory sesion = NewHibernateUtil.getSessionFactory();
             Session session = sesion.openSession();
             Transaction tx = session.beginTransaction();
-            lista = session.createQuery("FROM Proveedor").list();
+            lista = session.createQuery("FROM Salida").list();
             tx.commit();
         }
         catch(Exception e)
@@ -140,16 +140,16 @@ public class ProveedorDAO {
         return lista;
     }
     
-    public List<Proveedor> buscarPorCuit(String cuit)
+    public List<Salida> buscarPorFecha(Date fecha)
     {
-        List<Proveedor> lista = null;
+        List<Salida> lista = null;
         try
         {
             SessionFactory sesion = NewHibernateUtil.getSessionFactory();
             Session session = sesion.openSession();
             Transaction tx = session.beginTransaction();
-            Query query = session.createQuery("FROM Proveedor p WHERE p.cuit LIKE :cuit");
-            query.setParameter("cuit", "%"+cuit+"%");
+            Query query = session.createQuery("FROM Salida s WHERE s.fecha LIKE :fecha");
+            query.setParameter("fecha", "%"+fecha+"%");
             lista = query.list();
             tx.commit();
         }
@@ -159,26 +159,4 @@ public class ProveedorDAO {
         }
         return lista;
     }
-    
-   /*
-    public List<Proveedor> buscarPorCuitNombre(String cadena)
-    {
-        List<Proveedor> lista = null;
-        try
-        {
-            SessionFactory sesion = NewHibernateUtil.getSessionFactory();
-            Session session = sesion.openSession();
-            Transaction tx = session.beginTransaction();
-            Query query = session.createQuery("FROM Proveedor p WHERE p.cuit LIKE :cadena OR p.nombre_completo LIKE :cadena");
-            query.setParameter("cadena", "%"+cadena+"%");
-            lista = query.list();
-            tx.commit();
-        }
-        catch(Exception e)
-        {
-            JOptionPane.showMessageDialog(null, "Error");
-        }
-        return lista;
-    }
-    */
 }
