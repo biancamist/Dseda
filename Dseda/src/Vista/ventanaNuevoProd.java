@@ -25,6 +25,7 @@ public class ventanaNuevoProd extends javax.swing.JFrame
         
         this.setLocationRelativeTo(ventanaNuevoProd.this);
         this.setResizable(false);
+        this.setSize(500,350);
         //this.setBounds(500, 250, 540, 350); //derecha x abajo x 
     }
     

@@ -1,10 +1,17 @@
 package Vista;
 
+import Controlador.ProductoDAO;
+import Modelo.Producto;
+import Modelo.Proveedor;
+import java.util.List;
+import java.util.Set;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 public class ventanaProducto extends javax.swing.JFrame 
 {
+    ProductoDAO prodDAO = new ProductoDAO();
+    
     public ventanaProducto() 
     {
         initComponents();
@@ -175,6 +182,43 @@ public class ventanaProducto extends javax.swing.JFrame
         this.setVisible(false);
     }//GEN-LAST:event_btnEditarProdActionPerformed
 
+    public void llenarTabla()
+    {
+        DefaultTableModel modelo = new DefaultTableModel();
+        List<Producto> lista = prodDAO.listar();
+        String [] datos = new String[7];
+        
+        modelo.addColumn("Código");
+        modelo.addColumn("Descripción");
+        modelo.addColumn("Precio");
+        modelo.addColumn("Stock");
+        modelo.addColumn("Estado");
+        modelo.addColumn("Proveedor");
+        modelo.addColumn("Stock mínimo");
+        tablaProductos.setModel(modelo);
+        
+        for(Producto p : lista)
+        {
+            datos[0] = p.getCodigo();
+            datos[1] = p.getDescripcion();
+            datos[2] = String.valueOf(p.getPrecio());
+            datos[3] = String.valueOf(p.getStock());
+            if(p.isEstado())
+            {
+                datos[4] = "Habilitado";
+            }
+            else
+            {
+                datos[4] = "Deshabilitado";
+            }
+            String listaProveedores = "";
+           for(Object pr : p.getProveedor())
+           {
+               //listaProveedores += 
+           }
+           datos[6] = String.valueOf(p.getStockMinimo());
+        }
+    }
     public static void main(String args[]) 
     { 
         /* Create and display the form */
