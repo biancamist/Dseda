@@ -5,15 +5,17 @@
  */
 package Vista;
 
+import Controlador.ProveedorDAO;
+import Modelo.Proveedor;
+
 /**
  *
  * @author Bian
  */
 public class ventanaNuevoProv extends javax.swing.JFrame {
 
-    /**
-     * Creates new form ventanaNuevoProv
-     */
+    final ProveedorDAO provDAO = new ProveedorDAO();
+    
     public ventanaNuevoProv() {
         initComponents();
     }
@@ -62,6 +64,11 @@ public class ventanaNuevoProv extends javax.swing.JFrame {
         });
 
         btnCancelarNProv.setText("Cancelar");
+        btnCancelarNProv.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarNProvActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -133,8 +140,35 @@ public class ventanaNuevoProv extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnConfirmarNProvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarNProvActionPerformed
-        // TODO add your handling code here:
+        
+        long cuit = Long.parseLong(txfdCuitNProv.getText());
+        String nombre = txfdNombreNProv.getText();
+        String direccion = txfdDireccionNProv.getText();
+        int telefono = Integer.parseInt(txfdTelefonoNProv.getText());
+        boolean estado;
+        if(cbEstadoNProv.getSelectedItem().toString() == "Habilitado")
+        {
+            estado = true;
+        }
+        else
+        {
+            estado = false;
+        }
+        
+        Proveedor p = new Proveedor();
+        p.setCuit(cuit);
+        p.setDireccion(direccion);
+        p.setNombreCompleto(nombre);
+        p.setEstado(estado);
+        p.setTelefono(telefono);
+        
+        provDAO.alta(p);
     }//GEN-LAST:event_btnConfirmarNProvActionPerformed
+
+    private void btnCancelarNProvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarNProvActionPerformed
+        
+        this.dispose();
+    }//GEN-LAST:event_btnCancelarNProvActionPerformed
 
     /**
      * @param args the command line arguments

@@ -8,7 +8,9 @@ package Vista;
 import Controlador.ProveedorDAO;
 import Modelo.Proveedor;
 import java.util.*;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 /**
  *
@@ -17,9 +19,15 @@ import javax.swing.table.DefaultTableModel;
 public class ventanaSeleccionarProveedor extends javax.swing.JFrame {
 
     ProveedorDAO provDAO = new ProveedorDAO();
+    ventanaNuevoProd vNP = new ventanaNuevoProd();
     
     public ventanaSeleccionarProveedor() {
         initComponents();
+        
+        //tablaProveedor.getColumnModel().getColumn(4).setMaxWidth(0);
+        //tablaProveedor.getColumnModel().getColumn(4).setMinWidth(0);
+        //tablaProveedor.getColumnModel().getColumn(4).setPreferredWidth(0);
+        
         llenarTabla();
     }
 
@@ -40,32 +48,56 @@ public class ventanaSeleccionarProveedor extends javax.swing.JFrame {
 
         tablaProveedor.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "CUIT", "Nombre", "Dirección", "Teléfono", "ID"
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Integer.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         tablaProveedor.setSelectionMode(javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         jScrollPane1.setViewportView(tablaProveedor);
+        if (tablaProveedor.getColumnModel().getColumnCount() > 0) {
+            tablaProveedor.getColumnModel().getColumn(0).setResizable(false);
+            tablaProveedor.getColumnModel().getColumn(1).setResizable(false);
+            tablaProveedor.getColumnModel().getColumn(3).setResizable(false);
+            tablaProveedor.getColumnModel().getColumn(4).setResizable(false);
+            tablaProveedor.getColumnModel().getColumn(4).setPreferredWidth(0);
+        }
 
         btnAceptarSProv.setText("Confirmar");
+        btnAceptarSProv.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAceptarSProvActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 586, Short.MAX_VALUE)
-                .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addGap(259, 259, 259)
                 .addComponent(btnAceptarSProv)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(260, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -79,6 +111,27 @@ public class ventanaSeleccionarProveedor extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnAceptarSProvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarSProvActionPerformed
+        
+        TableModel modelo = tablaProveedor.getModel();
+        int [] indice = tablaProveedor.getSelectedRows();
+        int id;
+        List<Proveedor> listadoProveedor = new ArrayList();
+        
+        for(int i = 0; i < indice.length; i++)
+        {
+            id = Integer.parseInt(modelo.getValueAt(indice[i], 5).toString());
+            listadoProveedor.add(provDAO.buscarPorId(id));
+        }
+        
+        vNP.asignarProveedores(listadoProveedor);
+        
+        vNP.setVisible(true);
+        this.dispose();
+        
+        
+    }//GEN-LAST:event_btnAceptarSProvActionPerformed
 
     /**
      * @param args the command line arguments
@@ -125,13 +178,15 @@ public class ventanaSeleccionarProveedor extends javax.swing.JFrame {
         
         DefaultTableModel modelo = new DefaultTableModel();
         List<Proveedor> lista = provDAO.listar();
-        String [] datos = new String[5];
-        
+        String [] datos = new String[6];
+                
         modelo.addColumn("CUIT");
         modelo.addColumn("Nombre");
         modelo.addColumn("Dirección");
         modelo.addColumn("Teléfono");
         modelo.addColumn("Estado");
+        modelo.addColumn("ID");
+        
         
         for(Proveedor p : lista)
         {
@@ -147,9 +202,15 @@ public class ventanaSeleccionarProveedor extends javax.swing.JFrame {
             {
                 datos[4] = "Deshabilitado";
             }
+            datos[5] = String.valueOf(p.getId());
             modelo.addRow(datos);
         }
         tablaProveedor.setModel(modelo);
+        tablaProveedor.getColumnModel().getColumn(5).setMaxWidth(0);
+        tablaProveedor.getColumnModel().getColumn(5).setMinWidth(0);
+        tablaProveedor.getColumnModel().getColumn(5).setPreferredWidth(0);
+        tablaProveedor.getColumnModel().getColumn(5).setResizable(false);
+        tablaProveedor.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION); 
           
     }
 }

@@ -56,6 +56,11 @@ public class ventanaPrincipal extends javax.swing.JFrame
         menuProveedor.setText("Proveedor");
 
         itemMenuCargarProv.setText("Cargar proveedor");
+        itemMenuCargarProv.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemMenuCargarProvActionPerformed(evt);
+            }
+        });
         menuProveedor.add(itemMenuCargarProv);
 
         barraMenuPpal.add(menuProveedor);
@@ -90,6 +95,10 @@ public class ventanaPrincipal extends javax.swing.JFrame
         vProd.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_itemMenuAdminProdActionPerformed
+
+    private void itemMenuCargarProvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemMenuCargarProvActionPerformed
+       
+    }//GEN-LAST:event_itemMenuCargarProvActionPerformed
 
     public static void main(String args[]) 
     {        

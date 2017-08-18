@@ -6,11 +6,11 @@
 package Vista;
 
 import Controlador.ProductoDAO;
-import Modelo.Producto;
+import Modelo.*;
 import java.awt.Image;
 import java.io.File;
 import java.math.BigDecimal;
-import java.util.List;
+import java.util.*;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -18,6 +18,7 @@ import javax.swing.JOptionPane;
 public class ventanaNuevoProd extends javax.swing.JFrame 
 {       
     final ProductoDAO pDAO = new ProductoDAO();
+    static List<Proveedor> proveedorSeleccionado = new ArrayList();
     
     public ventanaNuevoProd()
     {
@@ -27,6 +28,15 @@ public class ventanaNuevoProd extends javax.swing.JFrame
         this.setResizable(false);
         this.setSize(500,350);
         //this.setBounds(500, 250, 540, 350); //derecha x abajo x 
+    
+        if(proveedorSeleccionado.isEmpty())
+        {
+            cbProveedoresSelecNP.addItem("Proveedor no seleccionado");
+        }
+        else
+        {
+            llenarComboBoxProveedor();
+        }
     }
     
     @SuppressWarnings("unchecked")
@@ -86,6 +96,9 @@ public class ventanaNuevoProd extends javax.swing.JFrame
         jLabel10.setText("Descripción:");
 
         cbEstadoNP.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Habilitado", "Deshabilitado" }));
+
+        cbProveedoresSelecNP.setEnabled(false);
+        cbProveedoresSelecNP.setName(""); // NOI18N
 
         btnSeleccionarProveedor.setText("Seleccionar Proveedor");
         btnSeleccionarProveedor.addActionListener(new java.awt.event.ActionListener() {
@@ -172,11 +185,11 @@ public class ventanaNuevoProd extends javax.swing.JFrame
                         .addGap(18, 18, 18)
                         .addComponent(btnCargarImagenNP)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnSeleccionarProveedor)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(cbProveedoresSelecNP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel7)))
+                                .addComponent(jLabel7))
+                            .addComponent(btnSeleccionarProveedor))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnConfirmarNP, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -222,7 +235,6 @@ public class ventanaNuevoProd extends javax.swing.JFrame
         String descripcion = txfdDescripNP.getText();
         int stockMin = Integer.parseInt(txfdStockMinNP.getText());
         double precio = Double.parseDouble(txfdPrecioNP.getText());
-        
         boolean estado;
         if(cbEstadoNP.getSelectedItem().toString() == "Habilitado")
         {
@@ -240,8 +252,10 @@ public class ventanaNuevoProd extends javax.swing.JFrame
         p.setStockMinimo(stockMin);
         p.setPrecio(BigDecimal.valueOf(precio));
         p.setEstado(estado);
+        p.setProveedor(proveedorSeleccionado);
         
         pDAO.alta(p);
+        proveedorSeleccionado.clear();
         
     }//GEN-LAST:event_btnConfirmarNPActionPerformed
 
@@ -289,6 +303,11 @@ public class ventanaNuevoProd extends javax.swing.JFrame
             }
         });
     }
+    
+    public void asignarProveedores(List<Proveedor> lista)
+    {
+        proveedorSeleccionado = lista;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelarNP;
@@ -310,4 +329,13 @@ public class ventanaNuevoProd extends javax.swing.JFrame
     private javax.swing.JTextField txfdPrecioNP;
     private javax.swing.JTextField txfdStockMinNP;
     // End of variables declaration//GEN-END:variables
+
+    private void llenarComboBoxProveedor() {
+        
+        cbProveedoresSelecNP.removeAllItems();
+        for(Proveedor p : proveedorSeleccionado)
+        {
+            cbProveedoresSelecNP.addItem(p.getNombreCompleto());
+        }
+    }
 }
