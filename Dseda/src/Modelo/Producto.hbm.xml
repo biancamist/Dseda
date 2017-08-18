@@ -12,12 +12,17 @@
             <column name="proveedor_id" not-null="true" />
         </many-to-one>
         -->
-        <set name="proveedor" table="proveedor" inverse="true" lazy="true" fetch="select">
+        <list name="proveedor" table="proveedor" inverse="true" lazy="true" fetch="select"> 
+            <key column="producto_id" not-null="true" /> 
+            <index column="ORDEN" /> 
+            <one-to-many class="Modelo.Proveedor" /> 
+        </list>
+        <!--<set name="proveedor" table="proveedor" inverse="true" lazy="true" fetch="select">
             <key>
                 <column name="producto_id" not-null="true" />
             </key>
             <one-to-many class="Modelo.Proveedor" />
-        </set>
+        </set> -->
         <property name="codigo" type="string">
             <column name="codigo" not-null="true" unique="true" />
         </property>

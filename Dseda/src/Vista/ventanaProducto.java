@@ -19,28 +19,7 @@ public class ventanaProducto extends javax.swing.JFrame
         this.setLocationRelativeTo(ventanaProducto.this);
         this.setResizable(false);
         
-        DefaultTableModel modelo = new DefaultTableModel();
-        modelo.addColumn("Codigo");
-        modelo.addColumn("Descripción");
-        modelo.addColumn("Precio");
-        modelo.addColumn("Stock");
-        modelo.addColumn("Estado");
-        modelo.addColumn("Proveedor");
-        
-        
-        String sql = "SELECT codigo, descripcion, precio, stock, estado, proveedor_id FROM Producto";
-        String []datos = new String[6];
-        try 
-        {
-            //Statement st = con.createStatement();
-            
-        }
-        catch (Exception e)
-        {
-                    
-        }
-        
-        tablaProductos.setModel(modelo);
+        llenarTabla();
     }
     
     @SuppressWarnings("unchecked")
@@ -195,7 +174,7 @@ public class ventanaProducto extends javax.swing.JFrame
         modelo.addColumn("Estado");
         modelo.addColumn("Proveedor");
         modelo.addColumn("Stock mínimo");
-        tablaProductos.setModel(modelo);
+        
         
         for(Producto p : lista)
         {
@@ -211,13 +190,17 @@ public class ventanaProducto extends javax.swing.JFrame
             {
                 datos[4] = "Deshabilitado";
             }
-            String listaProveedores = "";
-           for(Object pr : p.getProveedor())
+            String listadoProveedores = "";
+           for(Proveedor pr : p.getProveedor())
            {
-               //listaProveedores += 
+               listadoProveedores += pr.getNombreCompleto() + " - " + pr.getTelefono().toString() + " - " + pr.getDireccion() + "\n";
            }
+           datos[5] = listadoProveedores;
            datos[6] = String.valueOf(p.getStockMinimo());
+           modelo.addRow(datos);
         }
+        
+        tablaProductos.setModel(modelo);
     }
     public static void main(String args[]) 
     { 
